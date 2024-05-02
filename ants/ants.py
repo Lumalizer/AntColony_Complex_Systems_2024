@@ -2,6 +2,8 @@ import os
 import math
 import pandas as pd
 import numpy as np
+from scipy.signal import hilbert
+from multiSyncPy import synchrony_metrics as sm
 
 
 os.environ['QT_DEVICE_PIXEL_RATIO'] = ''  # disable annoying warnings on plotting
@@ -18,8 +20,7 @@ def get_datafiles_info(prepath="ants/"):
 
 
 def preprocess_antcolony_data(datafile):
-    ants = pd.read_csv(datafile, names=['frameno', 'ant_id',
-                                        'bbleft', 'bbtop', 'bbwidth', 'bbheight', 'confidence'])
+    ants = pd.read_csv(datafile, names=['frameno', 'ant_id', 'bbleft', 'bbtop', 'bbwidth', 'bbheight', 'confidence'])
 
     # there are multiple rows per frame, each row represents one ant in one frame, so there are multiple ants per frame
     # the ant_id is the unique identifier for each ant
@@ -39,3 +40,18 @@ def preprocess_antcolony_data(datafile):
     ants['angle'] = heading.apply(lambda x: math.atan(x) if x != 0 else 0)
     ants['cos(angle)'] = ants['angle'].apply(lambda x: math.cos(x))
     return ants
+
+
+def get_multisync_metrics(ants: pd.DataFrame, target_var: str = 'x', n_observations_per_ant: int = 100):
+    ant_dict = {ant_id: ants[ants['ant_id'] == ant_id] for ant_id in ants['ant_id'].unique()}
+    ant_dict = {ant_id: ant_data[:n_observations_per_ant]
+                for ant_id, ant_data in ant_dict.items() if len(ant_data) > n_observations_per_ant}
+
+    ant_team_data = np.array([ant_data[target_var].values for ant_data in ant_dict.values()])
+    data_phases = np.angle(hilbert(ant_team_data))
+
+    coherence = sm.coherence_team(ant_team_data)
+    symbolic_entropy = sm.symbolic_entropy(ant_team_data)
+    rho = sm.rho(data_phases)[1]
+
+    return coherence, symbolic_entropy, rho

@@ -1,0 +1,32 @@
+
+
+library(readr)
+ants <- read_csv("C:/Users/laura/OneDrive/Desktop/ants.csv")
+type 'help("mgcv-package")'.
+
+
+> memory 
+>1. dependency on past values -> bartels rank test
+
+bartels.rank.test(ants$x, alternative = "two.sided")
+
+> longe-range temporal correlations -> inspect (partial) autocorrelation functions
+
+N <- length(ants$x)
+length(which(abs(pacf(na.exclude(ants$x),lag.max=
+1000)$acf)>(2/sqrt(N))))
+max(which(abs(pacf(na.exclude(ants$x),
+lag.max=1000)$acf)>(2/sqrt(N))))
+
+>non-stationarity temporal correlations -> time-varying autoregressive model
+
+> regime shifts
+>non-stationarity -> KPSS; nonparametric change point analysis 
+
+kpss.test(na.exclude(ants$x),lshort=TRUE,null="Level")
+
+ts <- matrix(na.exclude(ants$x)) 
+e.out <- e.divisive(ts, R=500, sig.lvl=.002) df.e <- length(which(e.out$p.values<.002))
+e.out$estimates
+>sensitive dependence on initial conditions
+>limited predictive horizon -> forecast skill

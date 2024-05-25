@@ -20,8 +20,8 @@ def get_multisync_metrics(colony_data: pd.DataFrame, target_var: str = 'x',
                  for unit_id, colony_data in unit_dict.items() if len(colony_data) > n_observations_per_unit}
 
     removed = full_len - len(unit_dict)
-    if removed:
-        print(f"Removed {removed} out of {full_len} units with less than {n_observations_per_unit} observations")
+    # if removed:
+    #     print(f"Removed {removed} out of {full_len} units with less than {n_observations_per_unit} observations")
 
     team_data = np.array([unit_data[target_var].values for unit_data in unit_dict.values()])
     data_phases = np.angle(hilbert(team_data))

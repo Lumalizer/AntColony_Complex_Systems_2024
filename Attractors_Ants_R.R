@@ -3,7 +3,7 @@ library(dplyr)
 library(fields)
 library(gridExtra)
 library(grid)
-data <- read.table("ants/IndoorDataset/Seq0001Object10Image94/gt/gt.txt", sep=",")
+data <- read.table("dataset/ants/IndoorDataset/Seq0001Object10Image94/gt/gt.txt", sep=",")
 print(data)
 
 ant_data <- function(ant_id){
@@ -61,7 +61,6 @@ ant_data <- function(ant_id){
         if (i != nrow(ant)){
           x2 <- (l2 - w2)/2
           y2 <- (t2 - h2)/2
-          print(i)
           ant_list$next_x <- c(ant_list$next_x, x2)
           ant_list$next_y <-c(ant_list$next_y, y2)
         }

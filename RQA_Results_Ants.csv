@@ -1,0 +1,12 @@
+Colony,Ant id,Species,RR,DET,AvgL,ENT
+Indoor,Ant 12,Japanese arched,0.008,0.15,3.22,1.47
+Indoor,Ant 39,Japanese arched,0.140,0.42,3.11,1.45
+Indoor,Ant 42,Japanese arched,0.004,0.08,2.81,1.14
+Indoor,Ant 56,Japanese arched,0.014,0.19,2.67,1.11
+Indoor,Ant 65,Japanese arched,0.019,0.25,3.01,1.39
+Outdoor,Ant 119,Little black,0.026,0.28,6.42,2.43
+Outdoor,Ant 39,Little black,0.012, 0.10,3.56,1.52
+Outdoor,Ant 111,Little black,0.013,0.14,3.17,1.33
+Outdoor,Ant 26,Carpet,0.025,0.29,4.13,1.81
+Outdoor,Ant 142,Carpet,0.020,0.33,5.50,1.97
+

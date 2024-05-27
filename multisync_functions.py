@@ -20,6 +20,7 @@ def get_multisync_metrics(colony_data: pd.DataFrame, target_var: str = 'x',
                  for unit_id, colony_data in unit_dict.items() if len(colony_data) > n_observations_per_unit}
 
     removed = full_len - len(unit_dict)
+    
     # if removed:
     #     print(f"Removed {removed} out of {full_len} units with less than {n_observations_per_unit} observations")
 
@@ -29,12 +30,13 @@ def get_multisync_metrics(colony_data: pd.DataFrame, target_var: str = 'x',
     coherence = sm.coherence_team(team_data)
     symbolic_entropy = sm.symbolic_entropy(team_data)
     rho = sm.rho(data_phases)[1]
+    csd = sm.sum_normalized_csd(team_data)
 
-    return coherence, symbolic_entropy, rho
+    return coherence, csd, symbolic_entropy, rho
 
 
-def get_multisync_statistics(group1, group2):
-    metrics = ['coherence', 'symbolic_entropy', 'rho']
+def get_multisync_statistics(group1, group2, round_digits=10):
+    metrics = ['coherence', 'csd', 'symbolic_entropy', 'rho']
     ttest_pvalues = []
     ttest_statistic = []
     mannwhitneyu_pvalues = []
@@ -44,10 +46,10 @@ def get_multisync_statistics(group1, group2):
         ttest_result = stats.ttest_ind(group1[metric], group2[metric])
         mannwhitneyu_result = stats.mannwhitneyu(group1[metric], group2[metric])
 
-        ttest_pvalues.append(ttest_result.pvalue)
-        ttest_statistic.append(ttest_result.statistic)
-        mannwhitneyu_pvalues.append(mannwhitneyu_result.pvalue)
-        mannwhitneyu_statistic.append(mannwhitneyu_result.statistic)
+        ttest_pvalues.append(round(ttest_result.pvalue, round_digits))
+        ttest_statistic.append(round(ttest_result.statistic, round_digits))
+        mannwhitneyu_pvalues.append(round(mannwhitneyu_result.pvalue, round_digits))
+        mannwhitneyu_statistic.append(round(mannwhitneyu_result.statistic, round_digits))
 
     results_df = pd.DataFrame({
         'Metric': metrics,

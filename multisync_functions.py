@@ -4,25 +4,28 @@ from multiSyncPy import synchrony_metrics as sm
 from scipy import stats
 from scipy.signal import hilbert
 
-
-def get_multisync_metrics(colony_data: pd.DataFrame, target_var: str = 'x',
-                          n_observations_per_unit: int = 100, id_column='ant_id'):
-
+def get_unit_dict(colony_data: pd.DataFrame, id_column='ant_id', n_observations_per_unit=100):
+    """Returns a dictionary of units with at least n_observations_per_unit observations. Each unit is a DataFrame."""
     unit_dict = {unit_id: colony_data[colony_data[id_column] == unit_id]
                  for unit_id in colony_data[id_column].unique()}
-
-    # for key, item in unit_dict.items():
-    #     print(f"Unit {key} has {len(item)} observations")
-
+    
     full_len = len(unit_dict)
-
+    
     unit_dict = {unit_id: colony_data[:n_observations_per_unit]
                  for unit_id, colony_data in unit_dict.items() if len(colony_data) > n_observations_per_unit}
-
+    
     removed = full_len - len(unit_dict)
     
     # if removed:
     #     print(f"Removed {removed} out of {full_len} units with less than {n_observations_per_unit} observations")
+
+    return unit_dict
+
+
+def get_multisync_metrics(colony_data: pd.DataFrame, target_var: str = 'x',
+                          n_observations_per_unit: int = 100, id_column='ant_id'):
+                          
+    unit_dict = get_unit_dict(colony_data, id_column=id_column)
 
     team_data = np.array([unit_data[target_var].values for unit_data in unit_dict.values()])
     data_phases = np.angle(hilbert(team_data))

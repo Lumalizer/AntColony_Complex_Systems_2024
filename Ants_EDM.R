@@ -2,7 +2,7 @@ library(ggplot2)
 library(dplyr)
 library(rEDM)
 
-data <- read.table("dataset/ants/IndoorDataset/Seq0001Object10Image94/gt/gt.txt", sep=",")
+data <- read.table("ants/IndoorDataset/Seq0001Object10Image94/gt/gt.txt", sep=",")
 print(data)
 
 ant_data <- function(ant_id){
@@ -108,21 +108,26 @@ plot1
 plot2 <- ggplot(data<- a1, aes(x=angle, y= speed)) + geom_point() +ggtitle("ML and AP Scatterplot")
 plot2
 
-lib_point <- c(1,floor(max(length(a1$angle))/2))
-pred_point <- c(floor(max(length(a1$angle))/2)+1,max(length(a1$angle)))
+a1$angle <- as.numeric(scale(a1$angle))
+a1$speed <- as.numeric(scale(a1$speed))
 
-a1 %>%
-  select()
+plot3 <- ggplot(data=a1, aes(x=frame_no, y = angle)) + geom_line(aes(frame_no,angle), color="black") + geom_line(aes(frame_no,speed), color="blue")
++ xlab("Frames") + ylab("Position") + ggtitle("Movement Time Series")
+plot3
+
+lib_point <- c(1,floor(max(length(a1$speed))/2))
+pred_point <- c(floor(max(length(a1$speed))/2)+1,max(length(a1$speed)))
+
 # Check for the embedding dimensions
-rho_emd_ML <- EmbedDimension(dataFrame = a1, lib = lib_point, pred = pred_point, columns='angle', target ='angle')
+rho_emd_ML <- EmbedDimension(dataFrame = a1, lib = lib_point, pred = pred_point, columns='speed', target ='speed')
 
 
-simplex <- Simplex(dataFrame = a1, lib = lib_point, pred = pred_point, E=8, columns = 'angle', target = 'angle')
+simplex <- Simplex(dataFrame = a1, lib = lib_point, pred = pred_point, E=4, columns = 'angle', target = 'angle')
 
 plot(simplex$Observations, type='l', xlab="Time", ylab="Value", main="Angle Simplex Projection")
 lines(simplex$Predictions, type='l', col="blue")
 
 ComputeError(simplex$Observations, simplex$Predictions)
 
-rho_theta_ML<- PredictNonlinear(dataFrame = a1, lib = lib_point, pred = pred_point, E=8, columns='angle', target ='angle')
-
+rho_theta_ML<- PredictNonlinear(dataFrame = a1, lib = lib_point, pred = pred_point, E=, columns='speed', target ='speed')
+#Theta - 3

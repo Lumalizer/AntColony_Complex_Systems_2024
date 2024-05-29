@@ -22,8 +22,7 @@ def get_unit_dict(colony_data: pd.DataFrame, id_column='ant_id', n_observations_
     return unit_dict
 
 
-def get_multisync_metrics(colony_data: pd.DataFrame, target_var: str = 'x',
-                          n_observations_per_unit: int = 100, id_column='ant_id'):
+def get_multisync_metrics(colony_data: pd.DataFrame, target_var: str = 'x', id_column='ant_id', round_digits=3):
                           
     unit_dict = get_unit_dict(colony_data, id_column=id_column)
 
@@ -34,6 +33,11 @@ def get_multisync_metrics(colony_data: pd.DataFrame, target_var: str = 'x',
     symbolic_entropy = sm.symbolic_entropy(team_data)
     rho = sm.rho(data_phases)[1]
     csd = sm.sum_normalized_csd(team_data)
+
+    coherence = round(coherence, round_digits)
+    csd = round(csd, round_digits)
+    symbolic_entropy = round(symbolic_entropy, round_digits)
+    rho = round(rho, round_digits)
 
     return coherence, csd, symbolic_entropy, rho
 

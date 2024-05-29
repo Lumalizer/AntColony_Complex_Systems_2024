@@ -104,7 +104,6 @@ def shuffle_change_segments(df: pd.DataFrame, id_col: str, segm_length: int):
 
 
 def segm_shuffle(df: pd.DataFrame, x_col: str, y_col: str, id_col: str, segm_length: int):
-
     df = df.copy()
     get_change(df, x_col, y_col, id_col)
     shuffle_change_segments(df, id_col, segm_length)

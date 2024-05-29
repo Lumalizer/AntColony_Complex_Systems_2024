@@ -1,32 +1,9 @@
 import os
 import math
 import pandas as pd
-from multisync_functions import get_multisync_metrics
 
 
 os.environ['QT_DEVICE_PIXEL_RATIO'] = ''  # disable annoying warnings on plotting
-
-
-def process_bird_data(birds, selected_class, target_col_pre, n_scenes=10):
-    birds = birds[birds['Class'] == selected_class]
-    convert = []
-    results = []
-    for scene in range(n_scenes):
-        for bird_id in range(1, 20):
-            bird_id = scene * 20 + bird_id
-            target_col = target_col_pre + str(bird_id)
-            data = birds[target_col]
-            for d in data:
-                convert.append((scene, bird_id, d))
-
-    birds_convert = pd.DataFrame(convert, columns=['scene', 'bird_id', target_col_pre])
-
-    for scene in range(n_scenes):
-        target_birds = birds_convert[birds_convert['scene'] == scene]
-        result = get_multisync_metrics(target_birds, target_var=target_col_pre,
-                                       id_column='bird_id', n_observations_per_unit=1000)
-        results.append((scene, selected_class, *result))
-    return results
 
 
 def get_ant_datafiles_info(prepath=""):

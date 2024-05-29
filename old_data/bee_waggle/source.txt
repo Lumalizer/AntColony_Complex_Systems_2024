@@ -1,1 +1,0 @@
-downloaded from https://github.com/alan-turing-institute/TCPD/tree/master/datasets/bee_waggle_6

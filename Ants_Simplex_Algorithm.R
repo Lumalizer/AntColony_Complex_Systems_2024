@@ -111,8 +111,8 @@ plot2
 a1$angle <- as.numeric(scale(a1$angle))
 a1$speed <- as.numeric(scale(a1$speed))
 
-plot3 <- ggplot(data=a1, aes(x=frame_no, y = angle)) + geom_line(aes(frame_no,angle), color="black") + geom_line(aes(frame_no,speed), color="blue")
-+ xlab("Frames") + ylab("Position") + ggtitle("Movement Time Series")
+plot3 <- ggplot(data=a1, aes(x=frame_no, y = angle)) + geom_line(aes(frame_no,angle), color="black") + geom_line(aes(frame_no,speed), color="blue")+ 
+  xlab("Frames") + ylab("Position") + ggtitle("Movement Time Series")
 plot3
 
 lib_point <- c(1,floor(max(length(a1$speed))/2))

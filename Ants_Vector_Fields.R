@@ -123,13 +123,13 @@ ant1 <- ant_data(11)
 ant2 <- ant_data(12)
 ant3 <- ant_data(13)
 
-x1 <- ant1$x[1:length(a1$angle)]
-x2 <- ant2$x[1:length(a2$angle)]
-x3 <- ant3$x[1:length(a3$angle)]
+x1 <- ant1$x[1:length(ant1$angle)]
+x2 <- ant2$x[1:length(ant2$angle)]
+x3 <- ant3$x[1:length(ant3$angle)]
 
-y1 <- ant1$y[1:length(a1$angle)]
-y2 <- ant2$y[1:length(a2$angle)]
-y3 <- ant3$y[1:length(a3$angle)]
+y1 <- ant1$y[1:length(ant1$angle)]
+y2 <- ant2$y[1:length(ant2$angle)]
+y3 <- ant3$y[1:length(ant3$angle)]
 
 u1 <- cos(ant1$angle)
 u2 <- cos(ant2$angle)
@@ -177,21 +177,21 @@ ant4 <- ant_data(1)
 ant5 <- ant_data(2)
 ant6 <- ant_data(3)
 
-x1 <- ant1$x[1:length(a1$angle)]
-x2 <- ant2$x[1:length(a2$angle)]
-x3 <- ant3$x[1:length(a3$angle)]
+x1 <- ant1$x[1:length(ant4$angle)]
+x2 <- ant2$x[1:length(ant5$angle)]
+x3 <- ant3$x[1:length(ant6$angle)]
 
-y1 <- ant1$y[1:length(a1$angle)]
-y2 <- ant2$y[1:length(a2$angle)]
-y3 <- ant3$y[1:length(a3$angle)]
+y1 <- ant1$y[1:length(ant4$angle)]
+y2 <- ant2$y[1:length(ant5$angle)]
+y3 <- ant3$y[1:length(ant6$angle)]
 
-u1 <- cos(ant1$angle)
-u2 <- cos(ant2$angle)
-u3 <- cos(ant3$angle)
+u1 <- cos(ant4$angle)
+u2 <- cos(ant5$angle)
+u3 <- cos(ant6$angle)
 
-v1 <- sin(ant1$angle)
-v2 <- sin(ant2$angle)
-v3 <- sin(ant3$angle)
+v1 <- sin(ant4$angle)
+v2 <- sin(ant5$angle)
+v3 <- sin(ant6$angle)
 
 
 plot4 <- ggplot(data.frame(x = x1, y = y1, u = u1, v = v1), aes(x = x1, y = y1, xend = x1 + u1, yend = y1 + v1)) +

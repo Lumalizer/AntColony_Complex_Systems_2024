@@ -1,10 +1,8 @@
 library(ggplot2)
 library(dplyr)
-library(fields)
-library(gridExtra)
-library(grid)
-library(Hmisc)
-data <- read.table("ants/OutdoorDataset/Seq0006Object21Image64/gt/gt.txt", sep=",")
+library(rEDM)
+
+data <- read.table("ants/IndoorDataset/Seq0001Object10Image94/gt/gt.txt", sep=",")
 print(data)
 
 ant_data <- function(ant_id){
@@ -98,21 +96,35 @@ ant_data <- function(ant_id){
                    speed = ant_list$speed
   )
   
-  df <- df[-c(len+1), ]
+  df <- df[-c(351), ]
   return(df)
 }
 
 a1 <- ant_data(11)
 
-plot(a1$speed, type='l', xlab="Frames", ylab="Speed")
+plot1 <- ggplot(data<-a1, aes(x=frame_no, y=angle)) + geom_line(aes(frame_no, angle),color="black") + geom_line(aes(frame_no,speed), color="blue")
+plot1
 
-a1$speed_lag <- lag(a1$speed,1)
-a1$speed_lead <- lead(a1$speed,1)
-a1$change <- (a1$speed_lead - a1$speed_lag)
+plot2 <- ggplot(data<- a1, aes(x=angle, y= speed)) + geom_point() +ggtitle("ML and AP Scatterplot")
+plot2
 
-plot(a1$change, type='l', xlab="Frames", ylab="Speed")
+a1$angle <- as.numeric(scale(a1$angle))
+a1$speed <- as.numeric(scale(a1$speed))
 
-ggplot(data=a1, aes(x=frame_no, y=speed))+
-  geom_segment(aes(xend=frame_no,yend=speed+change), arrow=arrow(length=unit(.2,"cm")))+
-  stat_density2d(aes(color=..level..))+
-  labs(list(title="Vector Density Plot", x="Frames", y="Speed"))
+plot3 <- ggplot(data=a1, aes(x=frame_no, y = angle)) + geom_line(aes(frame_no,angle), color="black") + geom_line(aes(frame_no,speed), color="blue")
++ xlab("Frames") + ylab("Position") + ggtitle("Movement Time Series")
+plot3
+
+lib_point <- c(1,floor(max(length(a1$speed))/2))
+pred_point <- c(floor(max(length(a1$speed))/2)+1,max(length(a1$speed)))
+
+# Check for the embedding dimensions
+rho_emd_ML <- EmbedDimension(dataFrame = a1, lib = lib_point, pred = pred_point, columns='speed', target ='speed')
+
+
+simplex <- Simplex(dataFrame = a1, lib = lib_point, pred = pred_point, E=4, columns = 'angle', target = 'angle')
+
+plot(simplex$Observations, type='l', xlab="Time", ylab="Value", main="Angle Simplex Projection")
+lines(simplex$Predictions, type='l', col="blue")
+
+ComputeError(simplex$Observations, simplex$Predictions)

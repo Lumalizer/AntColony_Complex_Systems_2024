@@ -117,7 +117,25 @@ ggplot(data=a1, aes(x=frame_no, y=speed))+
   stat_density2d(aes(color=..level..))+
   labs(list(title="Vector Density Plot", x="Frames", y="Speed"))
 
+data <- read.table("ants/OutdoorDataset/Seq0006Object21Image64/gt/gt.txt", sep=",")
 
+a1 <- ant_data(1)
+
+plot(a1$speed, type='l', xlab="Frames", ylab="Speed")
+
+a1$speed_lag <- lag(a1$speed,1)
+a1$speed_lead <- lead(a1$speed,1)
+a1$change <- (a1$speed_lead - a1$speed_lag)
+
+plot(a1$change, type='l', xlab="Frames", ylab="Speed")
+
+ggplot(data=a1, aes(x=frame_no, y=speed))+
+  geom_segment(aes(xend=frame_no,yend=speed+change), arrow=arrow(length=unit(.2,"cm")))+
+  stat_density2d(aes(color=..level..))+
+  labs(list(title="Vector Density Plot", x="Frames", y="Speed"))
+
+
+data <- read.table("ants/IndoorDataset/Seq0001Object10Image94/gt/gt.txt", sep=",")
 
 ant1 <- ant_data(11)
 ant2 <- ant_data(12)
